@@ -8,20 +8,6 @@ class Recommendation_Engine:
         jl = Job_List()
         self.job_list = jl.generate_job()
 
-        self.worker_id = [worker['worker_id'] for worker in self.worker_list]
-        self.worker_name = [worker['name'] for worker in self.worker_list]
-        self.worker_gender = [worker['gender'] for worker in self.worker_list]
-        self.worker_skills = [worker['skills'] for worker in self.worker_list]
-        self.worker_experience = [worker['years_of_experience'] for worker in self.worker_list]
-        self.worker_location = [worker['location'] for worker in self.worker_list]
-
-        self.job_id = [job['job_id'] for job in self.job_list]
-        self.job_organisation = [job['organisation_names'] for job in self.job_list]
-        self.job_name = [job['job_names'] for job in self.job_list]
-        self.job_gender = [job['gender'] for job in self.job_list]
-        self.job_skills = [job['skills'] for job in self.job_list]
-        self.job_experience = [job['years_of_experience'] for job in self.job_list]
-        self.job_location = [job['location'] for job in self.job_list]
 
         self.recommendations = {}  
 
