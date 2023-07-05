@@ -1,7 +1,73 @@
 
 
+{
+ "Workers": [{
+                "district": "Palakkad",
+                "dob": "03-06-1996",
+                "email": "gfh@hiu.com",
+                "employment_status": "0",
+                "full_name": "fty",
+                "gender": "Male",
+                "pan_number": "MNJHU8888P",
+                "phone": "+914444444444",
+                "photo": "",
+                "pin_code": "678571",
+                "referral": {},
+                "state": "Kerala"
+            },
 
-{   "preference": "best case scenario",
-    "adjustable_job_years_experience": "2"
+             
+            {
+                "district": "Palakkad",
+                "dob": "10-06-1996",
+                "email": "fcgf@ghui.com",
+                "employment_status": "0",
+                "full_name": "AEF",
+                "gender": "Male",
+                "pan_number": "MNJHU7777D",
+                "phone": "+914545454545",
+                "photo": "",
+                "pin_code": "678571",
+                "referral": {},
+                "state": "Kerala"
+            }],
+
+ "Jobs": [{      
+                "area": "Madapur",
+                "district": "Coimbatore",
+                "end_date": "2023-06-22T19:30:00+01:00",
+                "facilities": [],
+                "filled": 0,
+                "gender": "Male",
+                "job_category": "Textiles",
+                "job_description": "werty",
+                "job_image": "https://firebasestorage.googleapis.com/v0/b/jansakti-dev.appspot.com/o/users%2FM4ZZniJA8LgT7reOn8KsUb72kPf1%2Fuploads%2F1676541737008000.png?alt=media&token=678598ec-8a4e-4dbb-8e06-289246e8da5e",
+                "job_status": "2",
+                "job_title": "gining",
+                "max_age": "49"
+            }, 
+            {
+                "min_qualification": "Below 8th Grade",
+                "min_salary": "1234",
+                "mode_of_salary": "Daily",
+                "number_of_vacancies": 12,
+                "org_ref_id": "/Organisations/Pnpigc3KMe2LLLVrLUF2",
+                "organisation_name": "Poppys Apparels",
+                "pin_code": "641664",
+                "primary_skill_level": "Less than 1 year",
+                "start_date": "6 June 2023 at 19:30:00 UTC+1",
+                "state": "Tamil Nadu",
+                "working_hours": "12"
+            }],
+
+
+
+ "Recommendations": [{
+
+
+ }] 
 
 }
+
+
+
