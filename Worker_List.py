@@ -163,6 +163,8 @@ class Worker_List:
             "Construction Laborer",
             "Agricultural Worker",
             "Mason",
+        ]
+        """
             "Carpenter",
             "Painter",
             "Plumber",
@@ -190,7 +192,7 @@ class Worker_List:
             "Construction Site Watchman",
             "Cycle Rickshaw Puller",
             "Auto Rickshaw Driver"
-        ]
+        """
 
 
         self.qualifications = [
@@ -204,7 +206,9 @@ class Worker_List:
         self.company_names = [
             "Shramik Solutions",
             "Kamgar Staffing",
-            "Kaushal Labor Co.",
+            "Kaushal Labor Co."
+        ]
+        """
             "Naukari Services",
             "Mazdoor Manpower",
             "SkillKart Staffing",
@@ -234,11 +238,14 @@ class Worker_List:
             "Nirmaan Staffing",
             "KarmaYogi Labor Co."
         ]
+        """
 
         self.job_titles = [
             "Laborer",
             "Janitor",
-            "Warehouse Worker",
+            "Warehouse Worker"
+        ]
+        """
             "Production Worker",
             "Cleaner",
             "Farm Worker",
@@ -266,7 +273,8 @@ class Worker_List:
             "Data Entry Clerk",
             "Groundskeeper",
             "Production Operator"
-        ]
+        """
+        
     
     def location_api(self):
 

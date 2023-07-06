@@ -96,7 +96,9 @@ class Job_List:
         self.secondary_skills = [
             "Construction Laborer",
             "Agricultural Worker",
-            "Mason",
+            "Mason"
+        ]
+        """
             "Carpenter",
             "Painter",
             "Plumber",
@@ -124,7 +126,7 @@ class Job_List:
             "Construction Site Watchman",
             "Cycle Rickshaw Puller",
             "Auto Rickshaw Driver"
-        ]
+        """
 
 
         self.qualifications = [
@@ -139,6 +141,8 @@ class Job_List:
             "Shramik Solutions",
             "Kamgar Staffing",
             "Kaushal Labor Co.",
+        ]
+        """
             "Naukari Services",
             "Mazdoor Manpower",
             "SkillKart Staffing",
@@ -167,12 +171,14 @@ class Job_List:
             "Sashakt Labor Agency",
             "Nirmaan Staffing",
             "KarmaYogi Labor Co."
-        ]
+        """
 
         self.job_titles = [
             "Laborer",
             "Janitor",
             "Warehouse Worker",
+        ]
+        """
             "Production Worker",
             "Cleaner",
             "Farm Worker",
@@ -200,7 +206,7 @@ class Job_List:
             "Data Entry Clerk",
             "Groundskeeper",
             "Production Operator"
-        ]
+        """
     
     def location_api(self):
 
@@ -251,6 +257,7 @@ class Job_List:
         
         job = {
             'organisation_name': random.choice(self.company_names),
+            'job_title': random.choice(self.job_titles),
             'gender': random.choice(['Male', 'Female', 'Gender Neutral']),
             'min_qualification': random.choice(self.qualifications),
             'primary_skills': random.choice(self.primary_skills),

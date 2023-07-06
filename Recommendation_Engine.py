@@ -3,7 +3,6 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import numpy as np
 import datetime
-import random
 import requests
 
 
@@ -11,13 +10,15 @@ class Recommendation_Engine:
 
     def __init__(self):
         self.attribute_weights = {
-            'primary_skills': 15,
-            'years_of_experience': 10,
-            'location': 4,
-            'min_qualification': 3,
-            'age':2,
-            'gender': 2,
-            'secondary_skills': 4
+        'primary_skills': 256,
+        'years_of_experience': 128,
+        'job_title': 64,
+        'location': 32,
+        'age': 16,
+        'gender': 8,
+        'secondary_skills': 4,
+        'min_qualification': 2,
+        'organisation_name': 1,
         }
 
         self.attribute_weights_array = self.dict_values_to_list(self.attribute_weights)
@@ -45,7 +46,7 @@ class Recommendation_Engine:
         workers_snapshot = workers_ref.get()
         self.worker_data = self._prepare_data(workers_snapshot)
         self.retrieve_worker_skills()
-        #self.retrieve_worker_experience()
+        self.retrieve_worker_experience()
         return self.worker_data
 
     def retrieve_worker_skills(self):
@@ -67,7 +68,7 @@ class Recommendation_Engine:
             if experience:
                 worker['experience'] = experience[0]
 
-    """
+    
     def retrieve_worker_experience(self):
         for worker_id, worker in self.worker_data.items():
             experience_ref = self.db.collection('Workers').document(worker_id).collection('Experience')
@@ -75,9 +76,14 @@ class Recommendation_Engine:
             experience_data = self._prepare_data(experience_snapshot)
 
             total_years = 0
+            company_names = []
+            job_titles = []
+
             for experience in experience_data.values():
                 start_date = experience['start_date']
                 end_date = experience['end_date']
+                company_name = experience['company_name']
+                job_title = experience['job_title']
 
                 start_date_obj = datetime.datetime.strptime(start_date, '%d/%m/%y')
                 end_date_obj = datetime.datetime.strptime(end_date, '%d/%m/%y')
@@ -87,8 +93,13 @@ class Recommendation_Engine:
 
                 total_years += end_year - start_year
 
-            worker['years_of_experience'] = total_years
-            """
+
+            worker['years_of_company_experience'] = total_years
+            worker['company_name'] = company_name
+            worker['job_title'] = job_title
+            
+            
+            
 
     def calculate_worker_age(self):
         for worker_id, worker in self.worker_data.items():
@@ -172,6 +183,12 @@ class Recommendation_Engine:
                 if 'experience' in worker and 'years_of_experience' in job and worker['experience'] >= job['years_of_experience']:
                     score += self.attribute_weights['years_of_experience']
 
+                if 'company_name' in worker and 'organisation_name' in job and worker['company_name'] == job['organisation_name']:
+                    score += self.attribute_weights['organisation_name']
+
+                if 'job_title' in worker and 'job_title' in job and worker['job_title'] == job['job_title']:
+                    score += self.attribute_weights['job_title']
+
 
                 # Calculate score for proximity of location
                 for worker_id, worker in self.worker_data.items():
@@ -214,6 +231,7 @@ class Recommendation_Engine:
     def matching_algorithm(self):
         worker_data = self.worker_data
         job_data = self.job_data
+        worker_scores = {}
 
         jobs = list(job_data.keys())
         num_jobs = len(jobs)
@@ -262,14 +280,50 @@ class Recommendation_Engine:
                         if 'experience' in worker and 'years_of_experience' in job:
                             if worker['experience'] >= job['years_of_experience']:
                                 matrix[i, j] = 1
+                    elif attribute == 'organisation_name':
+                        if 'company_name' in worker and 'organisation_name' in job:
+                            if worker['company_name'] == job['organisation_name']:
+                                matrix[i, j] = 1
+                    elif attribute == 'job_title':
+                        if 'job_title' in worker and 'job_title' in job:
+                            if worker['job_title'] == job['job_title']:
+                                matrix[i, j] = 1
+                
                     
                     else:
                         if attribute in worker and attribute in job and worker[attribute] == job[attribute]:
                             matrix[i, j] = 1
 
+            weighted_matrix = matrix * self.attribute_weights_array
+            score_vector = np.sum(weighted_matrix, axis=1)
 
+            # Pair each worker with their score
+            worker_scores.update(dict(zip(workers, score_vector)))
+
+            # Sort the workers' indices based on their scores in descending order
+            sorted_indices = np.argsort(score_vector)[::-1]
+            sorted_workers = [workers[idx] for idx in sorted_indices]
+            sorted_scores = score_vector[sorted_indices]
+
+            self.upload_data(job_id, worker_scores)
+
+            """
             print(f"Job: {job_id}")
-            print(matrix * self.attribute_weights_array)
+            print()
+            for worker_id, score in zip(sorted_workers, sorted_scores):
+                print(f"{worker_id}: {score}")
+            print()
+            """
+
+    def upload_data(self, job_id, worker_scores):
+        
+        scores = {worker_id: score for worker_id, score in worker_scores.items()}
+
+        scores_collection_ref = db.collection('Scores')
+        scores_collection_ref.document(job_id).set(scores)
+
+
+
 
 
 re = Recommendation_Engine()
