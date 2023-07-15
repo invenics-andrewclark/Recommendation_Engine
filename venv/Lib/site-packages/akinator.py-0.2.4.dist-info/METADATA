@@ -1,0 +1,37 @@
+Metadata-Version: 2.1
+Name: akinator.py
+Version: 0.2.4
+Requires-Dist: sphinx; extra == 'docs'
+Requires-Dist: furo; extra == 'docs'
+Requires-Dist: sphinxext-opengraph; extra == 'docs'
+Requires-Dist: sphinx-copybutton; extra == 'docs'
+Provides-Extra: docs
+License-File: LICENSE
+Summary: Python bindings for akinator-rs
+Keywords: akinator,python,async,game,pyo3
+Home-Page: https://github.com/Tom-the-Bomb/akinator.py
+Author: Tom-the-Bomb
+License: MIT
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
+Project-URL: repository, https://github.com/Tom-the-Bomb/akinator.py
+Project-URL: documentation, https://akinatorpy.readthedocs.io/en/latest/
+Project-URL: homepage, https://github.com/Tom-the-Bomb/akinator.py
+
+# Akinator-py
+Python bindings for ``akinator-rs``, a wrapper around the undocumented akinator API, made using [pyo3](https://pyo3.rs)
+
+designed for easy implementation of an akinator game in code, providing a simple and easy to use API.
+
+### Installation
+Prebuilt wheels are uploaded onto pypi, if you platform is supported, you can install with:
+
+```bash
+$ py -m pip install akinator.py
+```
+
+You can also build from source yourself if you have `rust` installed
+
+### Examples
+- refer to the [tests](https://github.com/Tom-the-Bomb/akinator.py/tree/master/tests) for full examples on usage
+- Refer to the **documentation** [here](https://akinatorpy.readthedocs.io/en/latest/) for more information

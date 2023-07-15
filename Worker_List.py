@@ -196,11 +196,11 @@ class Worker_List:
 
 
         self.qualifications = [
-            'Primary Education',
-            'Secondary Education',
-            'Higher Secondary Education',
-            'Diploma/Certificate Programs',
-            "Bachelor's Degree (BSc)",
+            '8th Pass',
+            '10th Pass',
+            '12th Pass',
+            'Graduation',
+            "Post graduation",
         ]
 
         self.company_names = [
@@ -274,6 +274,12 @@ class Worker_List:
             "Groundskeeper",
             "Production Operator"
         """
+
+        self.skill_level = [
+            'Less than 1 year',
+            '1 to 10 years',
+            'More than 10 years'
+        ]
         
     
     def location_api(self):
@@ -372,7 +378,7 @@ class Worker_List:
 
         skills = {
             'skill_name': random.choice(self.primary_skills),
-            'experience': random.randint(1, 5),
+            'experience': random.choice(self.skill_level),
             'is_primary': random.choice([True, False]),
         }
 
@@ -454,7 +460,7 @@ wl = Worker_List()
 
 wl.firebase()
 
-for _ in range(50):
+for _ in range(20):
     
     wl.upload_data()
     wl.upload_subcollection_data()

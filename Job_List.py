@@ -16,6 +16,8 @@ class Job_List:
 
         self.job_list = []
 
+        self.organisation_list = []
+
         self.skills_list = None
 
         self.experience_list = []
@@ -130,11 +132,11 @@ class Job_List:
 
 
         self.qualifications = [
-            'Primary Education',
-            'Secondary Education',
-            'Higher Secondary Education',
-            'Diploma/Certificate Programs',
-            "Bachelor's Degree (BSc)",
+            '8th Pass',
+            '10th Pass',
+            '12th Pass',
+            'Graduation',
+            "Post graduation",
         ]
 
         self.company_names = [
@@ -207,6 +209,11 @@ class Job_List:
             "Groundskeeper",
             "Production Operator"
         """
+        self.skill_level = [
+            'Less than 1 year',
+            '1 to 10 years',
+            'More than 10 years'
+        ]
     
     def location_api(self):
 
@@ -247,8 +254,39 @@ class Job_List:
         max_age = min_age + 30 + random.randint(1,17)
 
         return max_age
+    
+    def generate_organisation_data(self):
+        self.location_api()
+        organisation = {
+            'area': self.area,
+            'district': self.district,
+            'state': self.state,
+            'created_on': datetime.now(),
+            'organisation_name': random.choice(self.company_names)
+        }
 
+        self.organisation_list.append(organisation)
 
+        return self.organisation_list
+    
+    def randomise(self):
+
+        self.organisation_list = []  
+
+        random_organisation = pd.DataFrame(self.generate_organisation_data())
+        return random_organisation
+    
+    def upload_data(self):
+
+        pd.set_option('display.max_columns', None)
+
+        df = self.randomise().transpose()
+
+        dic = df.to_dict()
+
+        for idx in range(0, len(dic)):
+
+            self.db.collection('Organisations').add(dic[idx])
         
     def generate_job_data(self):
 
@@ -262,7 +300,7 @@ class Job_List:
             'min_qualification': random.choice(self.qualifications),
             'primary_skills': random.choice(self.primary_skills),
             'secondary_skills': random.sample(self.secondary_skills, random.randint(1, 3)),
-            'years_of_experience': random.randint(1, 5),
+            'skill_level': random.choice(self.skill_level),
             'state': self.state,
             'district': self.district,
             'area': self.area,
@@ -279,44 +317,39 @@ class Job_List:
 
         return self.job_list
     
-    def randomise(self):
+    def randomise_subcollection_data(self):
 
-   
+        random_job_choice = random.randint(1,5)
 
-        random_job = pd.DataFrame(self.generate_job_data())
+        for _ in range(random_job_choice):
 
-        #print(random_job)
-        return random_job
-    
-    def upload_data(self):
+            self.random_job_data = pd.DataFrame(self.generate_job_data())
 
-        for _ in range(5):
+    def upload_subcollection_data(self):
 
-            pd.set_option('display.max_columns', None)
+        self.randomise_subcollection_data()
 
-            df = self.randomise().transpose()
+        collection_ref = self.db.collection('Organisations')
+        query = collection_ref.order_by('created_on', direction=firestore.Query.DESCENDING).limit(1)
+        documents = query.get()
 
-            dic = df.to_dict()
-        
-            for idx in range(0, len(dic)):
+        for parent_doc in documents:
+            parent_doc_id = parent_doc.id
+            parent_doc_ref = collection_ref.document(parent_doc_id)
 
-                self.db.collection('Jobs').add(dic[idx])
-        
-    # Creating and uploading data to subcollections 'Skills' and 'Experience' and adding them to individual record
+            jobs_subcollection_ref = parent_doc_ref.collection('Jobs')
+
+            for _, job_row in self.random_job_data.iterrows():
+                
+                jobs_subcollection_ref.add(job_row.to_dict())
+
+        self.random_job_data.drop(self.random_job_data.index)
+
         
 jl = Job_List()
 
-
-
 jl.firebase()
 
-#wl.generate_random_date_of_birth(start_date='1960-01-01', end_date='2002-01-01')
-#jl.generate_dates()
-#jl.generate_job_data()
-#jl.randomise()
-jl.upload_data()
-#wl.generate_skills_data()
-#wl.generate_experience_dates()
-#wl.generate_experience_data()
-#wl.randomise_subcollection_data()
-#jl.upload_subcollection_data()
+for _ in range(10):
+    jl.upload_data()
+    jl.upload_subcollection_data()
